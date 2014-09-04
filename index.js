@@ -49,7 +49,7 @@ Song.prototype._download = function (url, playlist, done) {
     __dirname,
     'songs',
     playlist,
-    this.artist + ' - ' + this.title + '.mp4'
+    this.artist + ' - ' + this.title + '.m4a'
   ));
 
   // Make a request to the CDN for our file.
