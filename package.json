@@ -1,0 +1,28 @@
+{
+  "name": "songzadl",
+  "version": "0.0.0",
+  "description": "Specify a Playlist ID and download all the tracks you can find through Songza's API.",
+  "main": "index.js",
+  "dependencies": {
+    "async": "^0.9.0",
+    "node-taglib": "^0.8.0",
+    "request": "^2.40.0",
+    "taglib": "^0.8.0",
+    "tough-cookie": "^0.12.1",
+    "iconv": "^2.1.4"
+  },
+  "devDependencies": {},
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/evNN/songzadl.git"
+  },
+  "author": "Evan Dudla <evan@dud.la>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/evNN/songzadl/issues"
+  },
+  "homepage": "https://github.com/evNN/songzadl"
+}
