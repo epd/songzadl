@@ -5,11 +5,8 @@
   "main": "index.js",
   "dependencies": {
     "async": "^0.9.0",
-    "node-taglib": "^0.8.0",
-    "request": "^2.40.0",
-    "taglib": "^0.8.0",
-    "tough-cookie": "^0.12.1",
-    "iconv": "^2.1.4"
+    "request": "^2.42.0",
+    "tough-cookie": "^0.12.1"
   },
   "devDependencies": {},
   "scripts": {
