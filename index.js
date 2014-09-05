@@ -4,6 +4,7 @@ var fs = require('fs');
 var async = require('async');
 var request = require('request');
 var path = require('path');
+var exec = require('child_process').exec;
 
 var jar = request.jar();
 var r = request.defaults({
@@ -46,10 +47,7 @@ Song.prototype.toString = function () {
 
 Song.prototype._download = function (url, playlist, done) {
   var file = fs.createWriteStream(path.resolve(
-    __dirname,
-    'songs',
-    playlist,
-    this.artist + ' - ' + this.title + '.m4a'
+    '/tmp/' + Date.now().toString(36)
   ));
 
   // Make a request to the CDN for our file.
@@ -70,10 +68,31 @@ Song.prototype._download = function (url, playlist, done) {
 
   // Otherwise, pipe our song to our output stream and when it's done,
   // trigger our callback.
-  .on('end', done)
+  .on('end', function () {
+    this._verifyTags(file.path, playlist);
+    done();
+  }.bind(this))
 
   // Once all of our events are accounted for, actually get the stream!
   .pipe(file);
+};
+
+Song.prototype._verifyTags = function (source, playlist) {
+
+  // Override the artist, album, and title due to encoding issues.
+  var filename = path.resolve(
+    __dirname,
+    'songs',
+    playlist,
+    this.artist + ' - ' + this.title + '.m4a'
+  );
+  exec('ffmpeg -i "' + source + '" -metadata artist="' + this.artist + '" -metadata title="' + this.title + '" -metadata album="' + this.album + '" "' + filename + '"', function (err, stdout, stderr) {
+    if (err !== null) {
+      throw new Error('An error occurred writing tags for file (' + source + '): ' + err.toString());
+    }
+
+    fs.unlinkSync(source);
+  });
 };
 
 function Playlist(id) {
