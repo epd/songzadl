@@ -86,7 +86,7 @@ Song.prototype._verifyTags = function (source, playlist) {
     playlist,
     this.artist + ' - ' + this.title + '.m4a'
   );
-  exec('ffmpeg -i "' + source + '" -metadata artist="' + this.artist + '" -metadata title="' + this.title + '" -metadata album="' + this.album + '" "' + filename + '"', function (err, stdout, stderr) {
+  exec('ffmpeg -y -i "' + source + '" -metadata artist="' + this.artist.replace(/"/g, '\\"') + '" -metadata title="' + this.title.replace(/"/g, '\\"') + '" -metadata album="' + this.album.replace(/"/g, '\\"') + '" "' + filename.replace(/"/g, '\\"') + '"', function (err, stdout, stderr) {
     if (err !== null) {
       throw new Error('An error occurred writing tags for file (' + source + '): ' + err.toString());
     }
@@ -141,8 +141,7 @@ Playlist.prototype.getSongs = function () {
               return done();
             }
 
-            console.log(resp);
-            return done(new Error(body.message || 'An unexpected error occurred with the Songza API. Please try again.'));
+            return done(new Error(body.message || body || 'An unexpected error occurred with the Songza API. Please try again.'));
           }
 
           // If all is well, we have the Song!
@@ -153,7 +152,7 @@ Playlist.prototype.getSongs = function () {
           // Attempt to download it as well.
           song._download(body.listen_url, self.name, done);
         });
-      }, 300);
+      }, 500);
     },
 
     // Execute the previous function until our statusCode is not 200 OK.
